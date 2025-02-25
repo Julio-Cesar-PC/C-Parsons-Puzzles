@@ -11,7 +11,7 @@ const { userData, handleLogin, logout } = useAuth();
     <header>
         <div class="navbar bg-base-100">
             <div class="flex-1">
-                <a href="/" class="btn btn-ghost text-xl">C Parsons Puzzles</a>
+                <RouterLink to="/" class="btn btn-ghost text-xl">C Parsons Puzzles</RouterLink>
             </div>
             <div class="navbar-center">
                 <p v-if="userData">Olá, {{ userData.name }} | </p>{{ $route.name }}
