@@ -13,9 +13,6 @@ const { userData, handleLogin, logout } = useAuth();
             <div class="flex-1">
                 <RouterLink to="/" class="btn btn-ghost text-xl">C Parsons Puzzles</RouterLink>
             </div>
-            <div class="navbar-center">
-                <p v-if="userData">Olá, {{ userData.name }} | </p>{{ $route.name }}
-            </div>
             <div class="navbar-end">
                 <ul class="menu menu-horizontal px-1">
                     <li>

@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { getExercicioAleatorio } from '../api/exercicios';
+import { useAuth } from '@/composables/useAuth';
 
 const exercicio = ref(null);
 const loading = ref(true);
@@ -40,7 +41,7 @@ const enviarCodigo = () => {
     if (parson) {
         let feedback = parson.getFeedback();
         if (feedback.length === 0) {
-            alert("Código correto!");
+            mostrarFeedback("Parabéns! Você acertou o exercício!");
         } else {
             mostrarErros(feedback);
         }
@@ -52,16 +53,23 @@ const mostrarErros = (feedback) => {
     document.getElementById("erros").innerHTML = `<h2>Erros:</h2> ${errosHtml}`;
 };
 
+const mostrarFeedback = (mensagem) => {
+    document.getElementById("feedback").innerHTML = mensagem;
+    document.getElementById("feedback").removeAttribute("hidden");
+};
+
 onMounted(() => {
     iniciarParsons();
 });
+
+const { userData } = useAuth();
 </script>
 
 <template>
     <main>
-        <div class="flex items-center justify-center min-h-screen bg-gray-900 text-white px-6 py-1">
-            <div class="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-7xl mx-auto h-[95vh]">
-                <h1 class="text-2xl font-bold mb-6 text-center">Exemplo de js-parsons no Vue 3</h1>
+        <div class="flex items-center justify-center min-h-screen px-20 py-5">
+            <div class="p-10 rounded-lg shadow-lg w-full mx-auto h-[90vh] bg-base-300">
+                <h1 class="text-2xl font-bold mb-6 text-center">{{ $route.name.toLocaleUpperCase(1) }}</h1>
 
                 <div v-if="loading" class="text-center text-sm mb-4 align-middle">
                     <p>Carregando exercício...</p>
@@ -69,21 +77,23 @@ onMounted(() => {
 
                 <div class="text-center text-sm mb-4" v-if="exercicio">
                     <p>Enunciado:</p>
-                    <div class="bg-gray-700 p-4 rounded">
+                    <div class="bg-base-100 p-4 rounded">
                         {{ exercicio.enunciado }}
                     </div>
+                    <div id="feedback" class="mt-4 p-4 bg-success rounded text-white" hidden></div>
                 </div>
 
-                <div class="flex flex-wrap justify-center bg-gray-700 p-4 rounded mb-4 h-[50vh]">
-                    <div id="sortableTrash" class="sortable-code bg-gray-600 overflow-auto h-full"></div>
-                    <div id="sortable" class="sortable-code bg-gray-600 overflow-auto h-full"></div>
+                <div class="flex flex-wrap justify-center bg-base-100 p-4 rounded mb-4 h-[50vh]">
+                    <div id="sortableTrash" class="sortable-code bg-base-100 overflow-auto h-full"></div>
+                    <div id="sortable" class="sortable-code bg-base-100 overflow-auto h-full"></div>
                 </div>
 
                 <button @click="enviarCodigo" class="btn btn-primary w-full">
                     Enviar Código
                 </button>
 
-                <div id="erros" class="mt-4 p-4 bg-gray-800 rounded"></div>
+                <div id="erros" class="mt-4 p-4 bg-info-content rounded"></div>
+
 
             </div>
         </div>
