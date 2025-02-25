@@ -1,0 +1,1 @@
+import{_ as o,c as r,a as n,o as t}from"./index-CORlbic4.js";const a={};function s(c,e){return t(),r("main",null,e[0]||(e[0]=[n("h1",null,"Sobre view",-1)]))}const _=o(a,[["render",s]]);export{_ as default};
