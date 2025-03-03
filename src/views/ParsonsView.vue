@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { getExercicioAleatorio } from '../api/exercicios';
-import { useAuth } from '@/composables/useAuth';
 
 const exercicio = ref(null);
 const loading = ref(true);
@@ -20,6 +19,7 @@ const iniciarParsons = async () => {
             document.getElementById("sortableTrash").innerHTML = "";
         }
 
+        // eslint-disable-next-line no-undef
         parson = new ParsonsWidget({
             sortableId: "sortable",
             trashId: "sortableTrash",
@@ -62,7 +62,6 @@ onMounted(() => {
     iniciarParsons();
 });
 
-const { userData } = useAuth();
 </script>
 
 <template>

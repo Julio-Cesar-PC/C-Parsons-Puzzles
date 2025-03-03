@@ -11,7 +11,13 @@
     "lint": "eslint . --fix",
     "format": "prettier --write src/",
     "predeploy": "npm run build && cd dist && copy index.html 404.html",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "google:login": "clasp login",
+    "google:logout": "clasp logout",
+    "google:push": "clasp push",
+    "google:pull": "clasp pull",
+    "google:start": "clasp push --watch",
+    "google:open": "clasp open"
   },
   "dependencies": {
     "axios": "^1.7.9",
