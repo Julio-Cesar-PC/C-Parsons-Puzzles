@@ -28,14 +28,15 @@
 }
 ul.output {
     background-color: #a4acc7;
+    height: max-content;
 }
 .sortable-code li {
-    -moz-border-radius:10px;
-    -webkit-border-radius:10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
     border-radius: 5px;
-    background-color:#c1c4d0;
+    background-color: #c1c4d0;
     border: 1px dashed #e278c1;
-    padding:10px;
+    padding: 10px;
     margin-top: 5px;
     margin-bottom: 5px;
     white-space: normal;
@@ -53,7 +54,7 @@ ul.incorrect {
 
 ul.correct {
     background-color: #efffef;
-    background-color: #DFF2BF;
+    background-color: #dff2bf;
 }
 
 li.incorrectIndent {
@@ -66,27 +67,40 @@ li.correctIndent {
     border-left: 10px solid green;
 }
 
-li.incorrectPosition, .testcase.fail, .testcase.error {
+li.incorrectPosition,
+.testcase.fail,
+.testcase.error {
     background-color: #ce4848;
-    border:1px solid red;
+    border: 1px solid red;
 }
 
-li.correctPosition, .testcase.pass {
+li.correctPosition,
+.testcase.pass {
     background-color: #abc381;
-    border:1px solid green;
+    border: 1px solid green;
 }
 
-.testcase { padding: 10px; margin-bottom: 10px;}
-.testcase .msg { font-weight: bold; }
-.testcase .error { color: red;}
-.testcase .feedback { font-weight: bolder;}
-.testcase .fail .expected, .testcase .fail .actual {
-    color: red; 
+.testcase {
+    padding: 10px;
+    margin-bottom: 10px;
+}
+.testcase .msg {
+    font-weight: bold;
+}
+.testcase .error {
+    color: red;
+}
+.testcase .feedback {
     font-weight: bolder;
 }
-.testcase .output { 
-    display: block; 
-    white-space: pre; 
+.testcase .fail .expected,
+.testcase .fail .actual {
+    color: red;
+    font-weight: bolder;
+}
+.testcase .output {
+    display: block;
+    white-space: pre;
     background-color: #555555;
     color: white;
     font-size: 12px;
@@ -108,7 +122,7 @@ li.correctPosition, .testcase.pass {
     border-color: red;
 }
 .jsparson-toggle:empty:before {
-    content: "??";
+    content: '??';
     display: block;
     color: red;
 }

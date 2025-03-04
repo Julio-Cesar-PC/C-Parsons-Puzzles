@@ -1,9 +1,21 @@
+/* eslint-disable */
 module.exports = {
   content: ['./src/**/*.{vue,js,ts}'],
   theme: {
-    extend: {},
+    colors: {
+      code: '#828aa7',
+    },
   },
-  plugins: [
-    require('daisyui'),
-  ],
+  plugins: [require('daisyui')],
+  daisyui: {
+    themes: [
+      {
+        dark: {
+          ...require('daisyui/src/theming/themes')['dark'],
+          primary: '#059669',
+          secondary: '#10b981',
+        },
+      },
+    ],
+  },
 }

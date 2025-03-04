@@ -9,7 +9,7 @@ const { userData, handleLogin, logout } = useAuth();
 
 <template>
   <header>
-    <div class="navbar bg-base-100">
+    <div class="navbar border-b-2 bg-base-200 border-base-300">
       <div class="flex-1">
         <RouterLink to="/" class="btn btn-ghost text-xl">C Parsons Puzzles</RouterLink>
       </div>

@@ -3,9 +3,10 @@ import { decodeCredential } from 'vue3-google-login'
 import { postNovoUsuario } from '../api/usuarios'
 
 const userData = ref(null)
+const auth = ref(null)
 
-if (localStorage.getItem('userData')) {
-  userData.value = JSON.parse(localStorage.getItem('userData'))
+if (sessionStorage.getItem('userData')) {
+  userData.value = JSON.parse(sessionStorage.getItem('userData'))
 }
 
 const handleLogin = (response) => {
@@ -13,19 +14,19 @@ const handleLogin = (response) => {
     const credential = decodeCredential(response.credential)
     handleNovoUsuario(credential)
     userData.value = credential
-    localStorage.setItem('userData', JSON.stringify(credential))
+    sessionStorage.setItem('userData', JSON.stringify(credential))
     console.log('Usuário logado:', userData.value)
   }
 }
 
 const logout = () => {
   userData.value = null
-  localStorage.removeItem('userData')
+  sessionStorage.removeItem('userData')
 }
 
 watchEffect(() => {
   if (userData.value) {
-    localStorage.setItem('userData', JSON.stringify(userData.value))
+    sessionStorage.setItem('userData', JSON.stringify(userData.value))
   }
 })
 
@@ -40,13 +41,24 @@ const handleNovoUsuario = (credential) => {
       pic: credential.picture,
     },
   }
-  const response = postNovoUsuario(payloadCadastroUsuario)
-  console.log(response)
+  postNovoUsuario(payloadCadastroUsuario).then((response) => {
+    console.log(response)
+    if (response.status == 'success') {
+      auth.value = {
+        email_verified: credential.email_verified,
+        email: response.data.email,
+        sub: response.data.sub,
+      }
+      console.log('auth: ', auth.value)
+      sessionStorage.setItem('auth', JSON.stringify(auth.value))
+    }
+  })
 }
 
 export function useAuth() {
   return {
     userData,
+    auth,
     handleLogin,
     logout,
   }
