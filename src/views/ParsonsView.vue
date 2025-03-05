@@ -13,6 +13,7 @@ const { userData, auth } = useAuth();
 
 const iniciarParsons = async () => {
   try {
+    console.log('auth: ', auth.value)
     loading.value = true;
     getExercicioAleatorio(userData.value).then((response) => {
       loading.value = false;
@@ -121,7 +122,7 @@ onMounted(() => {
               <button @click="proximoExercicio" id="btn-proximo-exercicio" class="btn btn-accent join-item"
                 disabled>Próximo</button>
             </div>
-            <ProgressLevelBar :userLevel="userData.userLevel" :levelProgress="userData.levelProgress"
+            <ProgressLevelBar v-if="auth" :userLevel="userData.userLevel" :levelProgress="userData.levelProgress"
               :nextUserLevel="userData.nextUserLevel" />
           </div>
 
