@@ -3,7 +3,6 @@
 .sortable-code {
     position: static;
     padding-left: 0px;
-    margin-left: 2%;
     float: left;
 }
 #sortableTrash { width: 42%; }
@@ -28,7 +27,7 @@
 }
 ul.output {
     background-color: #a4acc7;
-    height: max-content;
+    min-height: 50%;
 }
 .sortable-code li {
     -moz-border-radius: 10px;
@@ -46,7 +45,10 @@ ul.output {
 .sortable-code li:hover {
     overflow: visible;
 }
-
+ul.ui-sortable {
+    background-color: #a4acc7;
+    min-height: 50%;
+}
 ul.incorrect {
     border: 1px solid red;
     background-color: #ffefef;

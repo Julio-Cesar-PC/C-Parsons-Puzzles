@@ -9,19 +9,22 @@ if (sessionStorage.getItem('userData')) {
   userData.value = JSON.parse(sessionStorage.getItem('userData'))
 }
 
-const handleLogin = (response) => {
+if (sessionStorage.getItem('auth')) {
+  auth.value = JSON.parse(sessionStorage.getItem('auth'))
+}
+
+const handleLogin = async (response) => {
   if (response.credential) {
     const credential = decodeCredential(response.credential)
-    handleNovoUsuario(credential)
-    userData.value = credential
-    sessionStorage.setItem('userData', JSON.stringify(credential))
-    console.log('Usuário logado:', userData.value)
+    await handleNovoUsuario(credential)
   }
 }
 
 const logout = () => {
   userData.value = null
+  auth.value = ref({})
   sessionStorage.removeItem('userData')
+  sessionStorage.removeItem('auth')
 }
 
 watchEffect(() => {
@@ -30,7 +33,7 @@ watchEffect(() => {
   }
 })
 
-const handleNovoUsuario = (credential) => {
+const handleNovoUsuario = async (credential) => {
   const payloadCadastroUsuario = {
     actionRequest: 'postNovoUsuario',
     payload: {
@@ -49,8 +52,11 @@ const handleNovoUsuario = (credential) => {
         email: response.data.email,
         sub: response.data.sub,
       }
+      userData.value = response.data
       console.log('auth: ', auth.value)
+      console.log('Usuário logado:', userData.value)
       sessionStorage.setItem('auth', JSON.stringify(auth.value))
+      sessionStorage.setItem('userData', JSON.stringify(userData.value))
     }
   })
 }

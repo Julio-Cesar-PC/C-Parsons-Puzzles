@@ -19,4 +19,18 @@ const postNovoUsuario = async (payload) => {
   }
 }
 
-export { postNovoUsuario }
+const postHistorico = async (payload) => {
+  try {
+    console.log('payloadPostHistorico: ', payload)
+    const response = await api.post('/exec', payload, {
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8',
+      },
+    })
+    return response.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export { postNovoUsuario, postHistorico }
