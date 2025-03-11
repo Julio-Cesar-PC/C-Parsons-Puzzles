@@ -3,9 +3,8 @@ import { ref, onMounted } from 'vue';
 import { getExercicioAleatorio } from '../api/exercicios';
 import { postHistorico } from '@/api/usuarios';
 import { useAuth } from '@/composables/useAuth';
-import ProgressLevelBar from '@/components/ProgressLevelBar.vue';
 
-const exercicio = ref(null);
+const exercicio = ref("");
 const loading = ref(true);
 let parson = null;
 const { userData, auth } = useAuth();
@@ -96,13 +95,15 @@ onMounted(() => {
 <template>
   <main>
     <div class="flex items-start flex-wrap justify-center min-h-2xl px-20 my-2">
-      <div class="px-10 py-5 rounded-lg shadow-lg w-full mx-auto h-[90vh] bg-base-300 flex justify-center gap-8">
-        <div v-show="loading" class="flex justify-center items-center">
-          <span class="loading loading-dots loading-lg"></span>
-        </div>
+      <div v-show="loading" class="fixed inset-0 flex justify-center items-center z-50">
+        <span class="loading loading-dots loading-lg"></span>
+      </div>
+      <!-- eslint-disable-next-line no-undef -->
+      <div :class="{ 'blur-sm': loading }"
+        class="px-10 py-5 rounded-lg shadow-lg w-full mx-auto h-[90vh] bg-base-300 flex justify-center gap-8">
         <!-- Coluna do Enunciado -->
-        <div v-show="!loading" class="w-1/4">
-          <div v-if="exercicio">
+        <div class="w-1/4">
+          <div>
             <h1 class="text-2xl font-bold mb-6 text-center">Enunciado:</h1>
             <div class="bg-code text-primary-content p-4 rounded">
               {{ exercicio.enunciado }}
@@ -114,7 +115,7 @@ onMounted(() => {
         </div>
 
         <!-- Coluna do Código -->
-        <div v-show="!loading" class="w-3/4">
+        <div class="w-3/4">
           <div class="w-full flex justify-evenly items-center">
             <div class="join">
               <button @click="enviarCodigo" class="btn btn-primary join-item">Enviar</button>
@@ -122,8 +123,6 @@ onMounted(() => {
               <button @click="proximoExercicio" id="btn-proximo-exercicio" class="btn btn-accent join-item"
                 disabled>Próximo</button>
             </div>
-            <ProgressLevelBar v-if="auth" :userLevel="userData.userLevel" :levelProgress="userData.levelProgress"
-              :nextUserLevel="userData.nextUserLevel" />
           </div>
 
           <div class="flex flex-wrap justify-evenly rounded mt-4 h-[70vh] max-h text-secondary-content">

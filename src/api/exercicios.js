@@ -1,4 +1,7 @@
 import axios from 'axios'
+import { useAuth } from '@/composables/useAuth'
+
+const { updateUserLevel } = useAuth()
 
 const api = axios.create({
   baseURL:
@@ -16,6 +19,7 @@ export const getExercicioAleatorio = async (auth) => {
           userId: auth.id,
         },
       })
+      updateUserLevel(response.data.userLevelInfo)
     } else {
       response = await api.get('/exec?actionRequest=getExercicioAleatorio', {
         params: {

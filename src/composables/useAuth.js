@@ -21,8 +21,8 @@ const handleLogin = async (response) => {
 }
 
 const logout = () => {
+  auth.value = null
   userData.value = null
-  auth.value = ref({})
   sessionStorage.removeItem('userData')
   sessionStorage.removeItem('auth')
 }
@@ -61,11 +61,19 @@ const handleNovoUsuario = async (credential) => {
   })
 }
 
+const updateUserLevel = (userLevelInfo) => {
+  userData.value.currentLevel = userLevelInfo.currentLevel
+  userData.value.levelProgress = userLevelInfo.levelProgress
+  userData.value.nextLevel = userLevelInfo.nextLevel
+  sessionStorage.setItem('userData', JSON.stringify(userData.value))
+}
+
 export function useAuth() {
   return {
     userData,
     auth,
     handleLogin,
     logout,
+    updateUserLevel,
   }
 }
