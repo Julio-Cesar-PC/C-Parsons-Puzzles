@@ -1,9 +1,11 @@
 import { ref, watchEffect } from 'vue'
 import { decodeCredential } from 'vue3-google-login'
 import { postNovoUsuario } from '../api/usuarios'
+import router from '@/router'
 
 const userData = ref(null)
 const auth = ref(null)
+const connecting = ref(false)
 
 if (sessionStorage.getItem('userData')) {
   userData.value = JSON.parse(sessionStorage.getItem('userData'))
@@ -15,8 +17,11 @@ if (sessionStorage.getItem('auth')) {
 
 const handleLogin = async (response) => {
   if (response.credential) {
+    connecting.value = true
     const credential = decodeCredential(response.credential)
     await handleNovoUsuario(credential)
+    connecting.value = false
+    router.push('/exercicios')
   }
 }
 
@@ -25,6 +30,7 @@ const logout = () => {
   userData.value = null
   sessionStorage.removeItem('userData')
   sessionStorage.removeItem('auth')
+  router.push('/')
 }
 
 watchEffect(() => {
@@ -44,7 +50,7 @@ const handleNovoUsuario = async (credential) => {
       pic: credential.picture,
     },
   }
-  postNovoUsuario(payloadCadastroUsuario).then((response) => {
+  await postNovoUsuario(payloadCadastroUsuario).then((response) => {
     console.log(response)
     if (response.status == 'success') {
       auth.value = {
@@ -75,5 +81,6 @@ export function useAuth() {
     handleLogin,
     logout,
     updateUserLevel,
+    connecting,
   }
 }

@@ -2,7 +2,7 @@
 import { GoogleLogin } from 'vue3-google-login';
 import { useAuth } from '@/composables/useAuth';
 
-const { userData, handleLogin, logout } = useAuth();
+const { userData, handleLogin, logout, connecting } = useAuth();
 </script>
 
 <template>
@@ -14,8 +14,8 @@ const { userData, handleLogin, logout } = useAuth();
         </div>
         <div v-else>
             <p>Faça login para continuar</p>
-            <GoogleLogin :callback="handleLogin">
-            </GoogleLogin>
+            <div v-if="connecting" class="loading loading-spinner loading-md"></div>
+            <GoogleLogin v-else :callback="handleLogin" />
         </div>
     </div>
 </template>

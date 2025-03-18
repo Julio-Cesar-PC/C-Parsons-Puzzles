@@ -51,39 +51,60 @@ const enviarCodigo = () => {
     if (feedback.length === 0) {
       mostrarFeedback("Parabéns! Você acertou o exercício!");
       document.getElementById('btn-proximo-exercicio').removeAttribute('disabled')
-    } else {
-      mostrarErros(feedback);
     }
   }
 };
 
 const proximoExercicio = async () => {
   loading.value = true
-  const payloadPostHistorico = {
-    "actionRequest": "postHistorico",
-    "payload": {
-      "userId": userData.value.id,
-      "startDate": new Date(),
-      "submitDate": new Date(),
-      "state": "completo",
-      "exerciseId": exercicio.value.id,
-      "triesCount": '1',
-      "exerciseDifficulty": exercicio.value.dificuldade
-    },
-    "auth": auth.value
+  if (auth.value) {
+    const payloadPostHistorico = {
+      "actionRequest": "postHistorico",
+      "payload": {
+        "userId": userData.value.id,
+        "startDate": new Date(),
+        "submitDate": new Date(),
+        "state": "completo",
+        "exerciseId": exercicio.value.id,
+        "triesCount": '1',
+        "exerciseDifficulty": exercicio.value.dificuldade
+      },
+      "auth": auth.value
+    }
+    await postHistorico(payloadPostHistorico)
   }
-  await postHistorico(payloadPostHistorico)
+  resetState();
   iniciarParsons();
 };
 
+const resetState = () => {
+  limparFeedback();
+  limparErros();
+  resetBtnProximoExercicio();
+};
+
+const resetBtnProximoExercicio = () => {
+  document.getElementById('btn-proximo-exercicio').setAttribute('disabled', true)
+}
+
 const mostrarErros = (feedback) => {
-  let errosHtml = feedback.errors.map(error => `<p>${error}</p>`).join('');
-  document.getElementById("erros").innerHTML = `<h2>Erros:</h2> ${errosHtml}`;
+  resetState();
+  let errosHtml = feedback.errors.map(error => `${error}`).join('');
+  document.getElementById("erros").innerHTML = `console > ${errosHtml}`;
+};
+
+const limparErros = () => {
+  document.getElementById("erros").innerHTML = "";
 };
 
 const mostrarFeedback = (mensagem) => {
   document.getElementById("feedback").innerHTML = mensagem;
   document.getElementById("feedback").removeAttribute("hidden");
+};
+
+const limparFeedback = () => {
+  document.getElementById("feedback").innerHTML = "";
+  document.getElementById("feedback").setAttribute("hidden", true);
 };
 
 onMounted(() => {
@@ -108,28 +129,30 @@ onMounted(() => {
             <div class="bg-code text-primary-content p-4 rounded">
               {{ exercicio.enunciado }}
             </div>
-            <div class="divider"></div>
-            <div id="erros" class="mt-4 p-4 bg-info-content rounded"></div>
             <div id="feedback" class="mt-4 p-4 bg-success rounded text-primary-content" hidden></div>
+            <div class="divider"></div>
+            <div class="w-full flex justify-evenly items-center mt-4">
+              <div class="join">
+                <button @click="enviarCodigo" class="btn btn-primary join-item">Enviar</button>
+                <button @click="resortearParsons" class="btn btn-secondary join-item">Resortear</button>
+                <button @click="proximoExercicio" id="btn-proximo-exercicio" class="btn btn-accent join-item"
+                  disabled>Próximo</button>
+              </div>
+            </div>
           </div>
         </div>
 
         <!-- Coluna do Código -->
         <div class="w-3/4">
-          <div class="w-full flex justify-evenly items-center">
-            <div class="join">
-              <button @click="enviarCodigo" class="btn btn-primary join-item">Enviar</button>
-              <button @click="resortearParsons" class="btn btn-secondary join-item">Resortear</button>
-              <button @click="proximoExercicio" id="btn-proximo-exercicio" class="btn btn-accent join-item"
-                disabled>Próximo</button>
-            </div>
-          </div>
-
           <div class="flex flex-wrap justify-evenly rounded mt-4 h-[70vh] max-h text-secondary-content">
             <div id="sortableTrash" class="py-4 px-2 sortable-code bg-code overflow-auto h-full max-h rounded">
             </div>
             <div id="sortable" class="py-4 px-2 sortable-code bg-code overflow-auto h-full max-h rounded">
             </div>
+          </div>
+          <div class="divider"></div>
+          <div id="erros" class="mt-4 p-4 bg-info-content rounded">
+            console >
           </div>
         </div>
 
