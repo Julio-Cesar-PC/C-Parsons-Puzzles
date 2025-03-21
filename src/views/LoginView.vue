@@ -5,12 +5,12 @@ import { ref } from 'vue';
 const userData = ref(null);
 
 const callback = (response) => {
-  console.log('Handle the response ', response);
+  // console.log('Handle the response ', response);
   if (response.credential) {
     const credential = decodeCredential(response.credential);
-    console.log('Decoded credential ', credential);
+    // console.log('Decoded credential ', credential);
     userData.value = credential;
-    console.log('User data ', userData.value);
+    // console.log('User data ', userData.value);
   }
 };
 

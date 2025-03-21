@@ -14,30 +14,34 @@ const triesCount = ref(1);
 const iniciarParsons = async () => {
   try {
     resetTriesCount();
-    console.log('auth: ', auth.value)
+    // console.log('auth: ', auth.value)
     loading.value = true;
     getExercicioAleatorio(userData.value).then((response) => {
       loading.value = false;
-      console.log('getExercicioAleatorio: ', response);
-      exercicio.value = response.exercicio;
-      console.log('exercicio: ', exercicio.value);
+      // console.log('getExercicioAleatorio: ', response);
+      if (response.exercicio) {
+        exercicio.value = response.exercicio;
+      } else {
+        document.getElementById('modal-error').showModal();
+      }
 
       if (parson) {
         document.getElementById("sortable").innerHTML = "";
         document.getElementById("sortableTrash").innerHTML = "";
       }
+      if (exercicio.value) {
+        // eslint-disable-next-line no-undef
+        parson = new ParsonsWidget({
+          sortableId: "sortable",
+          trashId: "sortableTrash",
+          max_wrong_lines: 1,
+          feedback_cb: mostrarErros,
+          lang: "ptbr"
+        });
 
-      // eslint-disable-next-line no-undef
-      parson = new ParsonsWidget({
-        sortableId: "sortable",
-        trashId: "sortableTrash",
-        max_wrong_lines: 1,
-        feedback_cb: mostrarErros,
-        lang: "ptbr"
-      });
-
-      parson.init(exercicio.value.exercicio);
-      parson.shuffleLines();
+        parson.init(exercicio.value.exercicio);
+        parson.shuffleLines();
+      }
     })
   } catch (error) {
     console.error("Erro ao buscar exercício", error);
@@ -59,7 +63,7 @@ const enviarCodigo = () => {
 
 const proximoExercicio = async () => {
   loading.value = true
-  console.log('triesCount: ', triesCount.value);
+  // console.log('triesCount: ', triesCount.value);
   if (auth.value) {
     const payloadPostHistorico = {
       "actionRequest": "postHistorico",
@@ -87,7 +91,7 @@ const resetState = () => {
 
 const addTriesCount = () => {
   triesCount.value += 1;
-  console.log('triesCount: ', triesCount.value);
+  // console.log('triesCount: ', triesCount.value);
 };
 
 const resetTriesCount = () => {
@@ -162,6 +166,35 @@ onMounted(() => {
       </div>
     </div>
 
+    <!-- Modal de Erro ao procuara exercicio -->
+    <dialog id="modal-error" class="modal">
+      <div class="modal-box">
+        <h3 class="text-lg font-bold">Erro ao buscar exercício</h3>
+        <p class="mt-4 p-4">
+          Não foi possível buscar um novo exercício.
+        </p>
+        <div class="collapse bg-base-200">
+          <input type="checkbox" />
+          <div class="collapse-title text-xl font-medium">Mostrar motivos</div>
+          <div class="collapse-content">
+            <!-- lista de motivos -->
+            <ul class="list-disc list-inside">
+              <li>Erro de conexão</li>
+              <li>Erro no servidor</li>
+              <li>Erro no banco de dados</li>
+              <li>Não existe exercícios para seu nível</li>
+            </ul>
+          </div>
+        </div>
+        <div class="modal-action">
+          <form method="dialog">
+            <button class="btn mr-2">Fechar</button>
+          </form>
+        </div>
+      </div>
+    </dialog>
+
+    <!-- Modal de Sucesso -->
     <dialog id="modal-success" class="modal">
       <div class="modal-box">
         <h3 class="text-lg font-bold">Parabéns! Você acertou o exercício!</h3>

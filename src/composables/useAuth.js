@@ -51,7 +51,7 @@ const handleNovoUsuario = async (credential) => {
     },
   }
   await postNovoUsuario(payloadCadastroUsuario).then((response) => {
-    console.log(response)
+    // console.log(response)
     if (response.status == 'success') {
       auth.value = {
         email_verified: credential.email_verified,
@@ -59,8 +59,8 @@ const handleNovoUsuario = async (credential) => {
         sub: response.data.sub,
       }
       userData.value = response.data
-      console.log('auth: ', auth.value)
-      console.log('Usuário logado:', userData.value)
+      // console.log('auth: ', auth.value)
+      // console.log('Usuário logado:', userData.value)
       sessionStorage.setItem('auth', JSON.stringify(auth.value))
       sessionStorage.setItem('userData', JSON.stringify(userData.value))
     }

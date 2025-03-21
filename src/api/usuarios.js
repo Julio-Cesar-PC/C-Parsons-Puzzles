@@ -7,7 +7,7 @@ const api = axios.create({
 
 const postNovoUsuario = async (payload) => {
   try {
-    console.log(payload)
+    // console.log(payload)
     const response = await api.post('/exec', payload, {
       headers: {
         'Content-Type': 'text/plain;charset=utf-8',
@@ -21,7 +21,7 @@ const postNovoUsuario = async (payload) => {
 
 const postHistorico = async (payload) => {
   try {
-    console.log('payloadPostHistorico: ', payload)
+    // console.log('payloadPostHistorico: ', payload)
     const response = await api.post('/exec', payload, {
       headers: {
         'Content-Type': 'text/plain;charset=utf-8',

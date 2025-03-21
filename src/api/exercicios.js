@@ -11,7 +11,7 @@ const api = axios.create({
 export const getExercicioAleatorio = async (auth) => {
   try {
     let response
-    console.log('auth getExercicio: ', auth)
+    // console.log('auth getExercicio: ', auth)
     if (auth != null) {
       response = await api.get('/exec?actionRequest=getExercicioAleatorio', {
         params: {
