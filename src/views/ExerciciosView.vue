@@ -8,16 +8,19 @@ const exercicio = ref("");
 const loading = ref(true);
 let parson = null;
 const { userData, auth } = useAuth();
+const triesCount = ref(1);
 
 
 const iniciarParsons = async () => {
   try {
+    resetTriesCount();
     console.log('auth: ', auth.value)
     loading.value = true;
     getExercicioAleatorio(userData.value).then((response) => {
       loading.value = false;
       console.log('getExercicioAleatorio: ', response);
       exercicio.value = response.exercicio;
+      console.log('exercicio: ', exercicio.value);
 
       if (parson) {
         document.getElementById("sortable").innerHTML = "";
@@ -49,14 +52,14 @@ const enviarCodigo = () => {
   if (parson) {
     let feedback = parson.getFeedback();
     if (feedback.length === 0) {
-      mostrarFeedback("Parabéns! Você acertou o exercício!");
-      document.getElementById('btn-proximo-exercicio').removeAttribute('disabled')
+      document.getElementById('modal-success').showModal();
     }
   }
 };
 
 const proximoExercicio = async () => {
   loading.value = true
+  console.log('triesCount: ', triesCount.value);
   if (auth.value) {
     const payloadPostHistorico = {
       "actionRequest": "postHistorico",
@@ -66,7 +69,7 @@ const proximoExercicio = async () => {
         "submitDate": new Date(),
         "state": "completo",
         "exerciseId": exercicio.value.id,
-        "triesCount": '1',
+        "triesCount": triesCount.value,
         "exerciseDifficulty": exercicio.value.dificuldade
       },
       "auth": auth.value
@@ -78,33 +81,30 @@ const proximoExercicio = async () => {
 };
 
 const resetState = () => {
-  limparFeedback();
   limparErros();
-  resetBtnProximoExercicio();
+  document.getElementById('modal-success').close();
 };
 
-const resetBtnProximoExercicio = () => {
-  document.getElementById('btn-proximo-exercicio').setAttribute('disabled', true)
-}
+const addTriesCount = () => {
+  triesCount.value += 1;
+  console.log('triesCount: ', triesCount.value);
+};
+
+const resetTriesCount = () => {
+  triesCount.value = 1;
+};
 
 const mostrarErros = (feedback) => {
   resetState();
   let errosHtml = feedback.errors.map(error => `${error}`).join('');
+  if (feedback.errors.length > 0) {
+    addTriesCount();
+  }
   document.getElementById("erros").innerHTML = `console > ${errosHtml}`;
 };
 
 const limparErros = () => {
   document.getElementById("erros").innerHTML = "";
-};
-
-const mostrarFeedback = (mensagem) => {
-  document.getElementById("feedback").innerHTML = mensagem;
-  document.getElementById("feedback").removeAttribute("hidden");
-};
-
-const limparFeedback = () => {
-  document.getElementById("feedback").innerHTML = "";
-  document.getElementById("feedback").setAttribute("hidden", true);
 };
 
 onMounted(() => {
@@ -116,28 +116,31 @@ onMounted(() => {
 <template>
   <main>
     <div class="flex items-start flex-wrap justify-center min-h-2xl px-20 my-2">
-      <div v-show="loading" class="fixed inset-0 flex justify-center items-center z-50">
-        <span class="loading loading-dots loading-lg"></span>
+      <!-- Tela de Loading com tema de jogo -->
+      <div v-show="loading" class="fixed inset-0 flex flex-col justify-center items-center z-50">
+        <div class="bg-base-100 px-8 py-6 rounded-lg shadow-lg text-center bg-opacity-50 flex flex-col items-center">
+          <p class="text-lg font-mono">Carregando novo desafio...</p>
+          <div class="loader mt-10"></div>
+        </div>
       </div>
+
       <!-- eslint-disable-next-line no-undef -->
       <div :class="{ 'blur-sm': loading }"
-        class="px-10 py-5 rounded-lg shadow-lg w-full mx-auto h-[90vh] bg-base-300 flex justify-center gap-8">
+        class="px-10 py-5 rounded-lg shadow-lg w-full mx-auto h-[88vh] bg-base-300 flex justify-center gap-8">
+
         <!-- Coluna do Enunciado -->
         <div class="w-1/4">
           <div>
-            <h1 class="text-2xl font-bold mb-6 text-center">Enunciado:</h1>
+            <div class="w-full flex justify-evenly items-center my-4">
+              <div class="join">
+                <button @click="resortearParsons" class="btn btn-secondary join-item">Resortear</button>
+                <button @click="enviarCodigo" class="btn btn-primary join-item">Enviar</button>
+              </div>
+            </div>
+            <div class="divider"></div>
+            <h1 class="text-2xl font-bold mb-4 text-center">Enunciado:</h1>
             <div class="bg-code text-primary-content p-4 rounded">
               {{ exercicio.enunciado }}
-            </div>
-            <div id="feedback" class="mt-4 p-4 bg-success rounded text-primary-content" hidden></div>
-            <div class="divider"></div>
-            <div class="w-full flex justify-evenly items-center mt-4">
-              <div class="join">
-                <button @click="enviarCodigo" class="btn btn-primary join-item">Enviar</button>
-                <button @click="resortearParsons" class="btn btn-secondary join-item">Resortear</button>
-                <button @click="proximoExercicio" id="btn-proximo-exercicio" class="btn btn-accent join-item"
-                  disabled>Próximo</button>
-              </div>
             </div>
           </div>
         </div>
@@ -158,5 +161,106 @@ onMounted(() => {
 
       </div>
     </div>
+
+    <dialog id="modal-success" class="modal">
+      <div class="modal-box">
+        <h3 class="text-lg font-bold">Parabéns! Você acertou o exercício!</h3>
+        <!-- <p class="mt-4 p-4">
+           <br>
+          Deseja avançar para o proximo, ou continuar nesse exercicio.
+        </p> -->
+        <!-- <div class="collapse bg-base-200">
+          <input type="checkbox" />
+          <div class="collapse-title text-xl font-medium">Mostrar código</div>
+          <div class="collapse-content">
+            <div class="mockup-code">
+              <pre><code>{{ exercicio.exercicio }}</code></pre>
+            </div>
+          </div>
+        </div> -->
+        <div class="modal-action">
+          <form method="dialog">
+            <button class="btn mr-2">Continuar</button>
+            <button @click="proximoExercicio" id="btn-proximo-exercicio" class="btn btn-primary">Avançar</button>
+          </form>
+        </div>
+      </div>
+    </dialog>
   </main>
 </template>
+
+<style>
+/* HTML: <div class="loader"></div> */
+.loader {
+  width: 45px;
+  height: 30px;
+  background:
+    linear-gradient(#059669 0 0) 0 100%/100% 50%,
+    linear-gradient(#059669 0 0) 0 0 /calc(100%/3) 100%;
+  background-repeat: no-repeat;
+  position: relative;
+  clip-path: inset(-100% 0 0 0);
+  animation: l2-0 2s infinite steps(4);
+}
+
+.loader::before,
+.loader::after {
+  content: "";
+  position: absolute;
+  inset: -50% 0 50%;
+  background:
+    linear-gradient(#00cdb7 0 0) 0 0 /calc(2*100%/3) 50%,
+    linear-gradient(#00cdb7 0 0) 100% 100%/calc(2*100%/3) 50%;
+  background-repeat: no-repeat;
+  animation: inherit;
+  animation-name: l2-1;
+}
+
+.loader::after {
+  inset: -100% 0 100%;
+  background:
+    linear-gradient(#10b981 0 0) 0 0/100% 50%,
+    linear-gradient(#10b981 0 0) 100% 0/calc(100%/3) 100%;
+  background-repeat: no-repeat;
+  animation-name: l2-2;
+}
+
+@keyframes l2-0 {
+  0% {
+    transform: translateY(-250%);
+    clip-path: inset(100% 0 0 0)
+  }
+
+  25%,
+  100% {
+    transform: translateY(0);
+    clip-path: inset(-100% 0 0 0)
+  }
+}
+
+@keyframes l2-1 {
+
+  0%,
+  25% {
+    transform: translateY(-250%)
+  }
+
+  50%,
+  100% {
+    transform: translateY(0)
+  }
+}
+
+@keyframes l2-2 {
+
+  0%,
+  50% {
+    transform: translateY(-250%)
+  }
+
+  75%,
+  100% {
+    transform: translateY(0)
+  }
+}
+</style>

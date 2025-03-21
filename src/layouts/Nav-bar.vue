@@ -19,7 +19,7 @@ const { userData, auth, handleLogin, logout, connecting } = useAuth();
           :nextUserLevel="userData.nextUserLevel" />
       </div>
       <div class="navbar-end">
-        <ul class="menu menu-horizontal px-1">
+        <ul class="menu menu-horizontal px-1 items-center">
           <li>
             <RouterLink to="exercicios">Exercícios</RouterLink>
           </li>

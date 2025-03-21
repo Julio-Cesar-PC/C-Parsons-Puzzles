@@ -20,8 +20,8 @@ const handleLogin = async (response) => {
     connecting.value = true
     const credential = decodeCredential(response.credential)
     await handleNovoUsuario(credential)
+    await router.push('/exercicios')
     connecting.value = false
-    router.push('/exercicios')
   }
 }
 
