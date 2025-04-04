@@ -100,7 +100,7 @@ const resetTriesCount = () => {
 
 const mostrarErros = (feedback) => {
   resetState();
-  let errosHtml = feedback.errors.map(error => `${error}`).join('');
+  let errosHtml = feedback.errors.map(error => `"log_error" ${error}`).join('<br>');
   if (feedback.errors.length > 0) {
     addTriesCount();
   }
@@ -130,7 +130,7 @@ onMounted(() => {
 
       <!-- eslint-disable-next-line no-undef -->
       <div :class="{ 'blur-sm': loading }"
-        class="px-10 py-5 rounded-lg shadow-lg w-full mx-auto h-[88vh] bg-base-300 flex justify-center gap-8">
+        class="px-10 py-5 rounded-lg shadow-lg w-full mx-auto h-[88vh] bg-base-300 flex justify-center gap-8 overflow-auto">
 
         <!-- Coluna do Enunciado -->
         <div class="w-1/4">
@@ -169,9 +169,10 @@ onMounted(() => {
     <!-- Modal de Erro ao procuara exercicio -->
     <dialog id="modal-error" class="modal">
       <div class="modal-box">
-        <h3 class="text-lg font-bold">Erro ao buscar exercício</h3>
+        <h3 class="text-lg font-bold">Por enqunto não temos mais exercícios para você!</h3>
         <p class="mt-4 p-4">
-          Não foi possível buscar um novo exercício.
+          <br>
+          Você pode tentar novamente mais tarde, ou entrar em contato com o suporte.
         </p>
         <div class="collapse bg-base-200">
           <input type="checkbox" />
@@ -179,10 +180,10 @@ onMounted(() => {
           <div class="collapse-content">
             <!-- lista de motivos -->
             <ul class="list-disc list-inside">
+              <li>Não existe exercícios para seu nível</li>
               <li>Erro de conexão</li>
               <li>Erro no servidor</li>
               <li>Erro no banco de dados</li>
-              <li>Não existe exercícios para seu nível</li>
             </ul>
           </div>
         </div>
