@@ -32,3 +32,14 @@ export const getExercicioAleatorio = async (auth) => {
     console.error(error)
   }
 }
+
+export const createExercicio = async (exercicio) => {
+  try {
+    const response = await api.post('/exec?actionRequest=postExercicio', {
+      ...exercicio,
+    })
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}

@@ -1,11 +1,10 @@
 <script setup>
 import { RouterLink } from 'vue-router'
-import { GoogleLogin } from 'vue3-google-login';
-import { useAuth } from '@/composables/useAuth';
-import ProgressLevelBar from '@/components/ProgressLevelBar.vue';
+import { GoogleLogin } from 'vue3-google-login'
+import { useAuth } from '@/composables/useAuth'
+import ProgressLevelBar from '@/components/ProgressLevelBar.vue'
 
-const { userData, auth, handleLogin, logout, connecting } = useAuth();
-
+const { userData, auth, handleLogin, logout, connecting } = useAuth()
 </script>
 
 <template>
@@ -15,8 +14,12 @@ const { userData, auth, handleLogin, logout, connecting } = useAuth();
         <RouterLink to="/" class="btn btn-ghost text-xl">C Parsons Puzzles</RouterLink>
       </div>
       <div class="navbar-center">
-        <ProgressLevelBar v-if="auth" :userLevel="userData.userLevel" :levelProgress="userData.levelProgress"
-          :nextUserLevel="userData.nextUserLevel" />
+        <ProgressLevelBar
+          v-if="auth"
+          :userLevel="userData.userLevel"
+          :levelProgress="userData.levelProgress"
+          :nextUserLevel="userData.nextUserLevel"
+        />
       </div>
       <div class="navbar-end">
         <ul class="menu menu-horizontal px-1 items-center">
@@ -36,7 +39,10 @@ const { userData, auth, handleLogin, logout, connecting } = useAuth();
                 <img v-if="userData" :src="userData.pic" alt="Foto de Perfil" />
               </div>
             </div>
-            <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+            <ul
+              tabindex="0"
+              class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+            >
               <li>
                 <button @click="logout">Logout</button>
               </li>
