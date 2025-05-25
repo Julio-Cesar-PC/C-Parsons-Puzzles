@@ -3,7 +3,6 @@ import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  mode: 'history',
   routes: [
     {
       path: '/',
@@ -38,6 +37,11 @@ const router = createRouter({
       name: 'exerciciosList',
       component: () => import('../views/ExerciciosListView.vue'),
     },
+    {
+      path: '/exercicio/:id/edit',
+      name: 'editExercicio',
+      component: () => import('../views/EditExercicioView.vue'),
+    }
   ],
 })
 

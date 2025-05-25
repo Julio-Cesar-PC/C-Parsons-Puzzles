@@ -1,10 +1,14 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRoute, router } from 'vue-router'
 import TagsInput from '@/components/TagsInput.vue'
 import CodeEditorC from '@/components/CodeEditorC.vue'
-import { createExercicio } from '../api/exercicios'
+import { getExercicioById, updateExercicio } from '../api/exercicios'
 
+const route = useRoute()
+const exercicioId = route.params.id
 const form = ref({
+  id: exercicioId,
   dificuldade: '',
   area: '',
   enunciado: '',
@@ -23,36 +27,50 @@ let parson = new ParsonsWidget({
   lang: 'ptbr',
 })
 
-parson.init(form.value.exercicio)
-parson.shuffleLines()
+const carregarExercicio = async () => {
+  try {
+    const response = await getExercicioById(exercicioId)
+    console.log('Exercício carregado:', response.status)
+    if (response.status === 'success') {
+      Object.assign(form.value, {
+        ...response.exercicio,
+        tags: response.exercicio.tags.split(','),
+      })
+      parson.init(form.value.exercicio)
+      parson.shuffleLines()
+    } else {
+      alert('Erro ao carregar exercício: ' + response.message)
+    }
+  } catch (error) {
+    console.error('Erro ao carregar exercício:', error)
+    alert('Ocorreu um erro ao carregar o exercício.')
+  }
+}
 
-const salvarExercicio = () => {
+onMounted(carregarExercicio)
+
+const salvarEdicao = () => {
   const payload = {
-    actionRequest: 'postExercicio',
+    actionRequest: 'updateExercicio',
     payload: {
       ...form.value,
       tags: form.value.tags.join(','),
-      imgEnunciado: '',
     },
   }
 
-  console.log('Payload:', payload)
-
-  createExercicio(payload)
+  updateExercicio(payload)
     .then((response) => {
-      if (response.success) {
-        alert('Exercício salvo com sucesso!')
+      if (response.status === 'success') {
+        router.push({ name: 'exerciciosList' })
+        alert('Exercício atualizado com sucesso!')
       } else {
-        alert('Erro ao salvar exercício: ' + response.message)
+        alert('Erro ao atualizar exercício: ' + response.message)
       }
     })
     .catch((error) => {
-      console.error('Erro ao salvar exercício:', error)
-      alert('Ocorreu um erro ao salvar o exercício.')
+      console.error('Erro ao atualizar exercício:', error)
+      alert('Ocorreu um erro ao atualizar o exercício.')
     })
-
-  console.log('Exercício salvo:', payload)
-  // Aqui você pode enviar os dados via API
 }
 
 const resetarParson = () => {
@@ -104,7 +122,7 @@ const handleBackTab = () => {
             <!-- Espaço invisível à direita para equilibrar visualmente -->
             <div class="w-[100px]"></div>
           </div>
-          <form @submit.prevent="salvarExercicio" class="">
+          <form @submit.prevent="salvarEdicao" class="">
             <div role="tablist" class="tabs tabs-lifted pb-5 px-0">
               <input
                 type="radio"

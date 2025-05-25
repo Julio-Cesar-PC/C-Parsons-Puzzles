@@ -47,3 +47,29 @@ export const createExercicio = async (exercicio) => {
     console.error(error)
   }
 }
+
+export const getExercicioById = async (id) => {
+  try {
+    const response = await api.get('/exec?actionRequest=getExercicioById', {
+      params: {
+        id: id,
+      },
+    })
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const updateExercicio = async (exercicio) => {
+  try {
+    const response = await api.post('', exercicio, {
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8',
+      },
+    })
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}

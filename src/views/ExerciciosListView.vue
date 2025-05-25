@@ -1,3 +1,40 @@
+<script setup>
+import { ref, onMounted } from 'vue'
+import CodeViewer from '@/components/CodeViewer.vue' // ou o caminho correto do seu componente
+
+const exercicios = ref([])
+const loading = ref(true)
+const error = ref(null)
+const modal = ref(null)
+const exercicioSelecionado = ref(null)
+
+const abrirModal = (ex) => {
+  exercicioSelecionado.value = ex
+  modal.value.showModal()
+}
+
+const fetchExercicios = async () => {
+  loading.value = true
+  try {
+    const res = await fetch(
+      'https://script.google.com/macros/s/AKfycbywGgvJFPnwXUqMjWtUkGqaewTqq7LaPNyMq2EmzEN-e-MoML1crdOTinf7upsxpEhl/exec/exec?actionRequest=getExercicioFiltrado&dificuldade=&area=&tags=',
+    )
+    const json = await res.json()
+    if (json.status === 'success') {
+      exercicios.value = json.data
+    } else {
+      error.value = 'Resposta inválida da API'
+    }
+  } catch (err) {
+    error.value = err.message || 'Erro desconhecido'
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(fetchExercicios)
+</script>
+
 <template>
   <div class="flex items-center flex-wrap justify-center min-h-2xl px-20 my-2">
     <div class="px-1 py-1 rounded-lg shadow-lg w-full mx-auto h-[88vh] bg-base-300">
@@ -11,16 +48,7 @@
 
           <!-- Botão "novo" à direita com ícone -->
           <RouterLink class="btn btn-primary flex items-center gap-2" to="createExercicio">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-              />
-            </svg>
+            <v-icon name="co-plus" />
             Novo
           </RouterLink>
         </div>
@@ -58,6 +86,12 @@
                 <td>{{ ex.area || 'N/A' }}</td>
                 <td>{{ ex.tags || 'N/A' }}</td>
                 <td>
+                  <RouterLink
+                    class="btn btn-sm btn-secondary"
+                    :to="{ name: 'editExercicio', params: { id: ex.id } }"
+                  >
+                    Editar
+                  </RouterLink>
                   <button class="btn btn-sm btn-primary" @click="abrirModal(ex)">Ver código</button>
                 </td>
               </tr>
@@ -85,39 +119,3 @@
     </div>
   </div>
 </template>
-<script setup>
-import { ref, onMounted } from 'vue'
-import CodeViewer from '@/components/CodeViewer.vue' // ou o caminho correto do seu componente
-
-const exercicios = ref([])
-const loading = ref(true)
-const error = ref(null)
-const modal = ref(null)
-const exercicioSelecionado = ref(null)
-
-const abrirModal = (ex) => {
-  exercicioSelecionado.value = ex
-  modal.value.showModal()
-}
-
-const fetchExercicios = async () => {
-  loading.value = true
-  try {
-    const res = await fetch(
-      'https://script.google.com/macros/s/AKfycbywGgvJFPnwXUqMjWtUkGqaewTqq7LaPNyMq2EmzEN-e-MoML1crdOTinf7upsxpEhl/exec/exec?actionRequest=getExercicioFiltrado&dificuldade=&area=&tags=',
-    )
-    const json = await res.json()
-    if (json.status === 'success') {
-      exercicios.value = json.data
-    } else {
-      error.value = 'Resposta inválida da API'
-    }
-  } catch (err) {
-    error.value = err.message || 'Erro desconhecido'
-  } finally {
-    loading.value = false
-  }
-}
-
-onMounted(fetchExercicios)
-</script>
