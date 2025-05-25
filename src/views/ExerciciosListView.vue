@@ -86,13 +86,23 @@ onMounted(fetchExercicios)
                 <td>{{ ex.area || 'N/A' }}</td>
                 <td>{{ ex.tags || 'N/A' }}</td>
                 <td>
-                  <RouterLink
-                    class="btn btn-sm btn-secondary"
-                    :to="{ name: 'editExercicio', params: { id: ex.id } }"
-                  >
-                    Editar
-                  </RouterLink>
-                  <button class="btn btn-sm btn-primary" @click="abrirModal(ex)">Ver código</button>
+                  <div class="flex gap-2">
+                    <!-- <RouterLink
+                      class="btn btn-sm btn-secondary"
+                      :to="{ name: 'exercicio', params: { id: ex.id } }"
+                    >
+                      Ver
+                    </RouterLink> -->
+                    <RouterLink
+                      class="btn btn-sm btn-secondary"
+                      :to="{ name: 'editExercicio', params: { id: ex.id } }"
+                    >
+                      Editar
+                    </RouterLink>
+                    <button class="btn btn-sm btn-primary" @click="abrirModal(ex)">
+                      Ver código
+                    </button>
+                  </div>
                 </td>
               </tr>
             </tbody>

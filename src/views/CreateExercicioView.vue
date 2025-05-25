@@ -93,7 +93,10 @@ const handleBackTab = () => {
         <div class="container m-auto px-1 py-12">
           <div class="flex justify-between items-center mb-4">
             <!-- Botão Voltar à esquerda com ícone -->
-            <RouterLink class="btn btn-primary flex items-center gap-2" to="exerciciosList">
+            <RouterLink
+              class="btn btn-primary flex items-center gap-2"
+              :to="{ name: 'exerciciosList' }"
+            >
               <v-icon name="co-arrow-left" />
               Voltar
             </RouterLink>
