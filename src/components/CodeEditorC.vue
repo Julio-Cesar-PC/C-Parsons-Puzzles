@@ -21,10 +21,7 @@ const emit = defineEmits(['update:modelValue'])
 const editorContainer = ref(null)
 let view = null
 const initialCode = `void main() {
-  int a = 0;
-  int b = 1;
-  int c = a + b;
-  printf("%d\\n", c);
+  // Your code here
 }`
 
 onMounted(() => {

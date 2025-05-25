@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "lint": "eslint . --fix",
     "format": "prettier --write src/",
-    "predeploy": "npm run build && cd dist && copy index.html 404.html",
+    "predeploy": "npm run build && cd dist && copy index.html 404.html && type nul > .nojekyll",
     "deploy": "gh-pages -d dist",
     "google:login": "clasp login",
     "google:logout": "clasp logout",
