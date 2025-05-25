@@ -46,6 +46,9 @@ const { userData, auth, handleLogin, logout, connecting } = useAuth()
               <li>
                 <button @click="logout">Logout</button>
               </li>
+              <li v-if="userData">
+                <RouterLink to="createExercicio">Exercicios</RouterLink>
+              </li>
             </ul>
           </li>
         </ul>
