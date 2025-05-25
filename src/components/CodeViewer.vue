@@ -9,25 +9,19 @@ import { EditorState } from '@codemirror/state'
 import { cpp } from '@codemirror/lang-cpp'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { defaultKeymap } from '@codemirror/commands'
-import { lineNumbers } from '@codemirror/view'
-import { highlightSpecialChars, drawSelection } from '@codemirror/view'
+import { lineNumbers, highlightSpecialChars, drawSelection } from '@codemirror/view'
 
 const props = defineProps({
   modelValue: String,
 })
 
-const emit = defineEmits(['update:modelValue'])
-
 const editorContainer = ref(null)
 let view = null
-const initialCode = `void main() {
-  // Your code here
-}`
 
 onMounted(() => {
   view = new EditorView({
     state: EditorState.create({
-      doc: props.modelValue || initialCode,
+      doc: props.modelValue || '',
       extensions: [
         lineNumbers(),
         highlightSpecialChars(),
@@ -36,11 +30,7 @@ onMounted(() => {
         keymap.of(defaultKeymap),
         cpp(),
         oneDark,
-        EditorView.updateListener.of((update) => {
-          if (update.docChanged) {
-            emit('update:modelValue', view.state.doc.toString())
-          }
-        }),
+        EditorView.editable.of(false), // leitura apenas
         EditorView.theme({
           '&': {
             height: '50vh',
@@ -66,11 +56,7 @@ watch(
   (newVal) => {
     if (view && newVal !== view.state.doc.toString()) {
       view.dispatch({
-        changes: {
-          from: 0,
-          to: view.state.doc.length,
-          insert: newVal,
-        },
+        changes: { from: 0, to: view.state.doc.length, insert: newVal },
       })
     }
   },
@@ -78,6 +64,5 @@ watch(
 </script>
 
 <style scoped>
-/* Melhora a renderização da fonte */
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
 </style>

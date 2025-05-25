@@ -33,6 +33,11 @@ const router = createRouter({
       name: 'createExercicio',
       component: () => import('../views/CreateExercicioView.vue'),
     },
+    {
+      path: '/exerciciosList',
+      name: 'exerciciosList',
+      component: () => import('../views/ExerciciosListView.vue'),
+    },
   ],
 })
 

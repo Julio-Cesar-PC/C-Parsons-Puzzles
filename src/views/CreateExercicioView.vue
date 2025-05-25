@@ -91,8 +91,30 @@ const handleBackTab = () => {
     <div class="flex items-center flex-wrap justify-center min-h-2xl px-20 my-2">
       <div class="px-1 py-1 rounded-lg shadow-lg w-full mx-auto h-[88vh] bg-base-300">
         <div class="container m-auto px-1 py-12">
-          <h1 class="text-3xl font-bold mb-6 text-center">Criar Exercício Parsons Puzzle</h1>
+          <div class="flex justify-between items-center mb-4">
+            <!-- Botão Voltar à esquerda com ícone -->
+            <RouterLink class="btn btn-primary flex items-center gap-2" to="exerciciosList">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm-.707-9.707a1 1 0 011.414 0l3 3a1 1 0 11-1.414 1.414L10 11.414l-2.293 2.293a1 1 0 01-1.414-1.414l3-3z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              Voltar
+            </RouterLink>
 
+            <!-- Título centralizado ocupando toda a largura restante -->
+            <h1 class="text-3xl font-bold text-center flex-1">Criar Exercício Parsons Puzzle</h1>
+
+            <!-- Espaço invisível à direita para equilibrar visualmente -->
+            <div class="w-[100px]"></div>
+          </div>
           <form @submit.prevent="salvarExercicio" class="">
             <div role="tablist" class="tabs tabs-lifted pb-5 px-0">
               <input
