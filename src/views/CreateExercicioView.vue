@@ -1,13 +1,18 @@
 <script setup>
 import { ref } from 'vue'
-import CodeEditor from '@/components/SimpleCodeEditor/CodeEditor.vue'
 import TagsInput from '@/components/TagsInput.vue'
+import CodeEditorC from '@/components/CodeEditorC.vue'
+import { createExercicio } from '../api/exercicios'
 
 const form = ref({
-  dificuldade: 'Fácil',
+  dificuldade: '',
   area: '',
   enunciado: '',
-  codigo: '',
+  exercicio: '',
+  max_wrong_lines: 1,
+  pythonTutor: '',
+  linkOneCompiler: '',
+  tags: [],
 })
 
 // eslint-disable-next-line no-undef
@@ -18,16 +23,40 @@ let parson = new ParsonsWidget({
   lang: 'ptbr',
 })
 
-parson.init(form.value.codigo)
+parson.init(form.value.exercicio)
 parson.shuffleLines()
 
 const salvarExercicio = () => {
-  console.log('Exercício salvo:', form.value)
+  const payload = {
+    actionRequest: 'postExercicio',
+    payload: {
+      ...form.value,
+      tags: form.value.tags.join(','),
+      imgEnunciado: '',
+    },
+  }
+
+  console.log('Payload:', payload)
+
+  createExercicio(payload)
+    .then((response) => {
+      if (response.success) {
+        alert('Exercício salvo com sucesso!')
+      } else {
+        alert('Erro ao salvar exercício: ' + response.message)
+      }
+    })
+    .catch((error) => {
+      console.error('Erro ao salvar exercício:', error)
+      alert('Ocorreu um erro ao salvar o exercício.')
+    })
+
+  console.log('Exercício salvo:', payload)
   // Aqui você pode enviar os dados via API
 }
 
 const resetarParson = () => {
-  parson.init(form.value.codigo)
+  parson.init(form.value.exercicio)
   parson.shuffleLines()
 }
 
@@ -74,7 +103,7 @@ const handleBackTab = () => {
                 aria-label="Editar"
                 checked
               />
-              <div role="tabpanel" class="tab-content p-5 bg-base-100 border rounded h-[65vh]">
+              <div role="tabpanel" class="tab-content p-5 bg-base-100 border rounded h-[70vh]">
                 <div class="space-y-6 max-w-5xl mx-auto flex flex-col justify-between h-full">
                   <div>
                     <!-- Linha 1: Dificuldade e Área -->
@@ -134,15 +163,11 @@ const handleBackTab = () => {
               </div>
 
               <input type="radio" name="tabs-1" role="tab" class="tab" aria-label="Código" />
-              <div role="tabpanel" class="tab-content p-5 bg-base-100 border rounded h-[65vh]">
+              <div role="tabpanel" class="tab-content p-5 bg-base-100 border rounded h-[70vh]">
                 <div class="space-y-6 max-w-5xl mx-auto flex flex-col justify-between h-full">
                   <div>
                     <label class="label">Código (ordem correta):</label>
-                    <CodeEditor
-                      class="textarea textarea-bordered w-full h-32"
-                      theme="github-dark"
-                      v-model="form.codigo"
-                    />
+                    <CodeEditorC v-model="form.exercicio" />
                     <p class="text-sm text-gray-400 mt-1">
                       Use <code>#distractor</code> no final de linhas erradas.
                     </p>
@@ -160,7 +185,7 @@ const handleBackTab = () => {
               </div>
 
               <input type="radio" name="tabs-1" role="tab" class="tab" aria-label="Opcionais" />
-              <div role="tabpanel" class="tab-content p-5 bg-base-100 border rounded h-[65vh]">
+              <div role="tabpanel" class="tab-content p-5 bg-base-100 border rounded h-[70vh]">
                 <div class="space-y-6 max-w-5xl mx-auto flex flex-col justify-between h-full">
                   <div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -168,7 +193,7 @@ const handleBackTab = () => {
                         <label class="label">Link Python Tutor:</label>
                         <input
                           type="text"
-                          v-model="form.linkPythonTutor"
+                          v-model="form.pythonTutor"
                           class="input input-bordered w-full"
                           placeholder="https://pythontutor.com/..."
                         />
@@ -208,7 +233,7 @@ const handleBackTab = () => {
                 aria-label="Preview"
                 :onchange="resetarParson()"
               />
-              <div role="tabpanel" class="tab-content p-5 bg-base-100 border rounded-lg h-[65vh]">
+              <div role="tabpanel" class="tab-content p-5 bg-base-100 border rounded-lg h-[70vh]">
                 <div class="flex justify-center gap-8 px-4">
                   <div class="w-1/4">
                     <div class="w-full flex justify-evenly items-center my-4">
@@ -239,9 +264,12 @@ const handleBackTab = () => {
                         class="py-4 px-2 sortable-code bg-code overflow-auto h-full max-h rounded"
                       ></div>
                     </div>
-                  </div>
-                  <div class="flex justify-center gap-4 px-4">
-                    <button type="submit" class="btn btn-primary">Salvar Exercício</button>
+                    <div class="flex justify-end mt-4">
+                      <button type="button" class="btn btn-secondary mr-2" @click="handleBackTab">
+                        Voltar
+                      </button>
+                      <button type="submit" class="btn btn-primary">Salvar Exercício</button>
+                    </div>
                   </div>
                 </div>
               </div>

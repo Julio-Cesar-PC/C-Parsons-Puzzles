@@ -7,26 +7,41 @@
   />
 </template>
 <script>
-import { defineComponent } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import Vue3TagsInput from 'vue3-tags-input'
 
 export default defineComponent({
-  name: 'BasicExample',
+  name: 'TagsInput',
+  components: { Vue3TagsInput },
 
-  components: {
-    Vue3TagsInput,
-  },
-
-  data() {
-    return {
-      tags: [],
-    }
-  },
-
-  methods: {
-    handleChangeTag(tags) {
-      this.tags = tags
+  props: {
+    modelValue: {
+      type: Array,
+      default: () => [],
     },
+  },
+
+  emits: ['update:modelValue'],
+
+  setup(props, { emit }) {
+    const internalTags = ref([...props.modelValue])
+
+    watch(
+      () => props.modelValue,
+      (newTags) => {
+        internalTags.value = [...newTags]
+      },
+    )
+
+    const handleChangeTag = (tags) => {
+      internalTags.value = tags
+      emit('update:modelValue', tags)
+    }
+
+    return {
+      internalTags,
+      handleChangeTag,
+    }
   },
 })
 </script>

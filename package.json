@@ -20,7 +20,12 @@
     "google:open": "clasp open"
   },
   "dependencies": {
+    "@codemirror/lang-cpp": "^6.0.2",
+    "@codemirror/state": "^6.5.2",
+    "@codemirror/theme-one-dark": "^6.1.2",
+    "@codemirror/view": "^6.36.8",
     "axios": "^1.7.9",
+    "codemirror": "^6.0.1",
     "highlight": "^0.2.4",
     "highlight.js": "^11.11.1",
     "vue": "^3.5.13",
@@ -37,6 +42,7 @@
     "eslint": "^9.20.1",
     "eslint-plugin-vue": "^9.32.0",
     "gh-pages": "^6.3.0",
+    "npm-force-resolutions": "^0.0.10",
     "postcss": "^8.5.3",
     "postcss-import": "^16.1.0",
     "prettier": "^3.5.1",
@@ -44,5 +50,8 @@
     "vite": "^6.1.0",
     "vite-plugin-static-copy": "^2.2.0",
     "vite-plugin-vue-devtools": "^7.7.2"
+  },
+  "resolutions": {
+    "@codemirror/state": "^6.2.0"
   }
 }

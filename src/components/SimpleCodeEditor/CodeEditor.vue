@@ -122,7 +122,7 @@ export default {
   props: {
     lineNums: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     modelValue: {
       type: String,
@@ -156,11 +156,11 @@ export default {
     },
     width: {
       type: String,
-      default: '540px',
+      default: 'auto',
     },
     height: {
       type: String,
-      default: 'auto',
+      default: '50vh',
     },
     maxWidth: {
       type: String,
