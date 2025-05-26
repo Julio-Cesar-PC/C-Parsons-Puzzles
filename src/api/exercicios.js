@@ -73,3 +73,27 @@ export const updateExercicio = async (exercicio) => {
     console.error(error)
   }
 }
+
+export const deleteExercicio = async (payload) => {
+  try {
+    const response = await api.post('', payload, {
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8',
+      },
+    })
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export const getExercicioFiltrado = async (params) => {
+  try {
+    const response = await api.get('/exec?actionRequest=getExercicioFiltrado', {
+      params: params,
+    })
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
