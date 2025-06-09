@@ -157,7 +157,7 @@ onMounted(() => {
         <p class="mt-4">Seu exercício foi visualizado corretamente.</p>
 
         <div class="flex gap-4">
-          <div role="tablist" class="tabs tabs-lifted pb-5 px-0 w-full">
+          <div role="tablist" class="tabs tabs-bordered pb-5 px-0 w-full">
             <input
               type="radio"
               name="tabs-1"
@@ -169,7 +169,7 @@ onMounted(() => {
             />
             <div
               role="tabpanel"
-              class="tab-content p-5 bg-base-100 border rounded h-[55vh] w-full"
+              class="tab-content p-5 border rounded h-[55vh] w-full"
               v-if="exercicio.pythonTutor"
             >
               <iframe
@@ -188,7 +188,7 @@ onMounted(() => {
             />
             <div
               role="tabpanel"
-              class="tab-content p-5 bg-base-100 border rounded h-[55vh] w-full"
+              class="tab-content p-5 border rounded h-[55vh] w-full"
               v-if="exercicio.linkOneCompiler"
             >
               <iframe
