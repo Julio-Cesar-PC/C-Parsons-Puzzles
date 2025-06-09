@@ -56,6 +56,8 @@ const enviarCodigo = () => {
     let feedback = parson.getFeedback()
     if (feedback.length === 0) {
       document.getElementById('modal-success').showModal()
+    } else {
+      document.getElementById('modal-feedback').showModal()
     }
   }
 }
@@ -99,15 +101,26 @@ const resetTriesCount = () => {
 
 const mostrarErros = (feedback) => {
   resetState()
+
   let errosHtml = feedback.errors.map((error) => `"log_error" ${error}`).join('<br>')
+
   if (feedback.errors.length > 0) {
     addTriesCount()
   }
-  document.getElementById('erros').innerHTML = `console > ${errosHtml}`
+
+  const divErrosTela = document.getElementById('erros')
+  const divErrosModal = document.getElementById('erros-modal')
+
+  if (divErrosTela) divErrosTela.innerHTML = `console > ${errosHtml}`
+  if (divErrosModal) divErrosModal.innerHTML = `console > ${errosHtml}`
 }
 
 const limparErros = () => {
-  document.getElementById('erros').innerHTML = ''
+  const divErrosTela = document.getElementById('erros')
+  const divErrosModal = document.getElementById('erros-modal')
+
+  if (divErrosTela) divErrosTela.innerHTML = 'console >'
+  if (divErrosModal) divErrosModal.innerHTML = 'console >'
 }
 
 onMounted(() => {
@@ -172,7 +185,7 @@ onMounted(() => {
       </div>
     </div>
 
-    <!-- Modal de Erro ao procuara exercicio -->
+    <!-- Modal de Erro ao procurar exercicio -->
     <dialog id="modal-error" class="modal">
       <div class="modal-box">
         <h3 class="text-lg font-bold">Por enqunto não temos mais exercícios para você!</h3>
@@ -203,29 +216,81 @@ onMounted(() => {
 
     <!-- Modal de Sucesso -->
     <dialog id="modal-success" class="modal">
-      <div class="modal-box">
+      <div class="modal-box w-full max-w-7xl">
+        <!-- Título -->
         <h3 class="text-lg font-bold">Parabéns! Você acertou o exercício!</h3>
-        <!-- <p class="mt-4 p-4">
-           <br>
-          Deseja avançar para o proximo, ou continuar nesse exercicio.
-        </p> -->
-        <!-- <div class="collapse bg-base-200">
-          <input type="checkbox" />
-          <div class="collapse-title text-xl font-medium">Mostrar código</div>
-          <div class="collapse-content">
-            <div class="mockup-code">
-              <pre><code>{{ exercicio.exercicio }}</code></pre>
+
+        <!-- Tabs + conteúdo -->
+        <div class="flex gap-4">
+          <div role="tablist" class="tabs tabs-lifted pb-5 px-0 w-full">
+            <!-- Aba Python Tutor -->
+            <input
+              type="radio"
+              name="tabs-2"
+              role="tab"
+              class="tab"
+              aria-label="Python Tutor"
+              checked
+              v-if="exercicio.pythonTutor"
+            />
+            <div
+              role="tabpanel"
+              class="tab-content p-5 bg-base-100 border rounded h-[55vh] w-full"
+              v-if="exercicio.pythonTutor"
+            >
+              <iframe
+                :src="exercicio.pythonTutor"
+                class="w-full h-full rounded-lg"
+                title="Python Tutor"
+              ></iframe>
+            </div>
+
+            <!-- Aba OneCompiler -->
+            <input
+              type="radio"
+              name="tabs-2"
+              role="tab"
+              class="tab"
+              aria-label="OneCompiler"
+              v-if="exercicio.linkOneCompiler"
+            />
+            <div
+              role="tabpanel"
+              class="tab-content p-5 bg-base-100 border rounded h-[55vh] w-full"
+              v-if="exercicio.linkOneCompiler"
+            >
+              <iframe
+                :src="`https://onecompiler.com/embed/c/${exercicio.linkOneCompiler}?theme=dark&hideLanguageSelection=true&hideNew=true&hideNewFileOption=true`"
+                class="w-full h-full rounded-lg"
+                title="OneCompiler"
+              ></iframe>
             </div>
           </div>
-        </div> -->
-        <div class="modal-action">
+        </div>
+
+        <!-- Botão -->
+        <div class="modal-action mt-6">
           <form method="dialog">
-            <button class="btn mr-2">Continuar</button>
-            <button @click="proximoExercicio" id="btn-proximo-exercicio" class="btn btn-primary">
-              Avançar
-            </button>
+            <button class="btn mr-2">Fechar</button>
+            <button class="btn btn-primary" @click="proximoExercicio">Próximo Exercício</button>
           </form>
         </div>
+      </div>
+    </dialog>
+
+    <!-- Modal de Feedback -->
+    <dialog id="modal-feedback" class="modal">
+      <div class="modal-box max-w-5xl">
+        <form method="dialog">
+          <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        </form>
+        <h3 class="text-lg font-bold">Feedback do Exercício</h3>
+        <p class="mt-4">Verifique os erros e acertos do seu exercício.</p>
+        <div class="divider"></div>
+        <div id="erros-modal" class="mt-4 p-4 bg-info-content rounded">console ></div>
+        <p class="text-sm mt-2 text-right italic text-code">
+          O feedback te ajuda a enteder os erros da sua solução.
+        </p>
       </div>
     </dialog>
   </main>

@@ -1,5 +1,4 @@
 <script setup>
-import { RouterLink } from 'vue-router'
 import { GoogleLogin } from 'vue3-google-login'
 import { useAuth } from '@/composables/useAuth'
 import ProgressLevelBar from '@/components/ProgressLevelBar.vue'
@@ -11,7 +10,9 @@ const { userData, auth, handleLogin, logout, connecting } = useAuth()
   <header>
     <div class="navbar border-b-2 bg-base-200 border-base-300">
       <div class="navbar-start">
-        <RouterLink to="/" class="btn btn-ghost text-xl">C Parsons Puzzles</RouterLink>
+        <RouterLink :to="{ name: 'home' }" class="btn btn-ghost text-xl"
+          >C Parsons Puzzles</RouterLink
+        >
       </div>
       <div class="navbar-center">
         <ProgressLevelBar
@@ -24,10 +25,10 @@ const { userData, auth, handleLogin, logout, connecting } = useAuth()
       <div class="navbar-end">
         <ul class="menu menu-horizontal px-1 items-center">
           <li>
-            <RouterLink to="exercicios">Exercícios</RouterLink>
+            <RouterLink :to="{ name: 'exercicios' }">Exercícios</RouterLink>
           </li>
           <li>
-            <RouterLink to="sobre">Sobre</RouterLink>
+            <RouterLink :to="{ name: 'sobre' }">Sobre</RouterLink>
           </li>
           <li v-if="!userData">
             <div v-if="connecting" class="loading loading-spinner loading-md"></div>
@@ -47,7 +48,7 @@ const { userData, auth, handleLogin, logout, connecting } = useAuth()
                 <button @click="logout">Logout</button>
               </li>
               <li v-if="userData">
-                <RouterLink to="exerciciosList">Exercicios</RouterLink>
+                <RouterLink :to="{ name: 'exerciciosList' }">Exercicios</RouterLink>
               </li>
             </ul>
           </li>

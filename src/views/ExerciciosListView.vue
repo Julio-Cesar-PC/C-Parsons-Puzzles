@@ -119,7 +119,10 @@ onMounted(fetchExercicios)
 
             <button class="btn btn-primary" @click="fetchExercicios">Filtrar</button>
           </div>
-          <RouterLink class="btn btn-primary flex items-center gap-2" to="createExercicio">
+          <RouterLink
+            class="btn btn-primary flex items-center gap-2"
+            :to="{ name: 'createExercicio' }"
+          >
             <v-icon name="co-plus" />
             Novo
           </RouterLink>
@@ -152,8 +155,14 @@ onMounted(fetchExercicios)
             </thead>
             <tbody>
               <tr v-for="ex in exercicios" :key="ex.id" class="hover">
-                <td>{{ ex.id }}</td>
-                <td class="max-w-xs whitespace-pre-wrap">{{ ex.enunciado }}</td>
+                <td>
+                  {{ ex.id }}
+                </td>
+                <td class="max-w-xs whitespace-pre-wrap">
+                  <RouterLink :to="{ name: 'exercicioPreview', params: { id: ex.id } }">{{
+                    ex.enunciado
+                  }}</RouterLink>
+                </td>
                 <td>{{ ex.dificuldade }}</td>
                 <td>{{ ex.area || 'N/A' }}</td>
                 <td>{{ ex.tags || 'N/A' }}</td>
@@ -165,6 +174,13 @@ onMounted(fetchExercicios)
                     >
                       Ver
                     </RouterLink> -->
+                    <button
+                      title="Deletar Exercício"
+                      class="btn btn-square btn-error"
+                      @click="handleDeleteExercicio(ex.id)"
+                    >
+                      <v-icon name="fa-trash" />
+                    </button>
                     <button
                       title="Ver Código"
                       class="btn btn-square btn-primary"
@@ -179,13 +195,6 @@ onMounted(fetchExercicios)
                     >
                       <v-icon name="fa-edit" />
                     </RouterLink>
-                    <button
-                      title="Deletar Exercício"
-                      class="btn btn-square btn-error"
-                      @click="handleDeleteExercicio(ex.id)"
-                    >
-                      <v-icon name="fa-trash" />
-                    </button>
                   </div>
                 </td>
               </tr>
