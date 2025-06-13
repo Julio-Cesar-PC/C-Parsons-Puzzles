@@ -18,6 +18,7 @@ const form = ref({
   pythonTutor: '',
   linkOneCompiler: '',
   tags: [],
+  max_tries: '',
 })
 
 // eslint-disable-next-line no-undef
@@ -241,9 +242,22 @@ const handleBackTab = () => {
                         />
                       </div>
                     </div>
-                    <div>
-                      <label class="label">Tags:</label>
-                      <TagsInput class="" v-model="form.tags" />
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label class="label">Tags:</label>
+                        <TagsInput class="" v-model="form.tags" />
+                      </div>
+                      <div>
+                        <label class="label">Tentativas máximas:</label>
+                        <input
+                          type="number"
+                          v-model="form.max_tries"
+                          class="input input-bordered w-full"
+                          placeholder="Número de tentativas"
+                          min="0"
+                          max="10"
+                        />
+                      </div>
                     </div>
                   </div>
 

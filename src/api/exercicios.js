@@ -5,7 +5,7 @@ const { updateUserLevel } = useAuth()
 
 const api = axios.create({
   baseURL:
-    'https://script.google.com/macros/s/AKfycbywGgvJFPnwXUqMjWtUkGqaewTqq7LaPNyMq2EmzEN-e-MoML1crdOTinf7upsxpEhl/exec',
+    'https://script.google.com/macros/s/AKfycbwDYnCeY9lJR2eXjrw0QHee48oh9xyxZSxH98EikxPFTMfxSCkWhS574RiXbgEK0fmW/exec',
 })
 
 export const getExercicioAleatorio = async (auth) => {

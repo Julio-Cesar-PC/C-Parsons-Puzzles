@@ -21,6 +21,16 @@ const iniciarParsons = async () => {
       if (response.exercicio) {
         exercicio.value = response.exercicio
       } else {
+        console.error('Nenhum exercício encontrado')
+
+        // Limpa os containers do parsons caso existam
+        if (parson) {
+          document.getElementById('sortable').innerHTML = ''
+          document.getElementById('sortableTrash').innerHTML = ''
+          parson = null
+          exercicio.value = ''
+        }
+
         document.getElementById('modal-error').showModal()
       }
 
@@ -48,15 +58,22 @@ const iniciarParsons = async () => {
 }
 
 const resortearParsons = async () => {
+  console.log('Resorteando parsons...')
   iniciarParsons()
 }
 
 const enviarCodigo = () => {
+  console.log('Enviando código...')
+  console.log('triesCount: ', triesCount.value)
   if (parson) {
     let feedback = parson.getFeedback()
     if (feedback.length === 0) {
       document.getElementById('modal-success').showModal()
     } else {
+      if (exercicio.value.max_tries > 0 && triesCount.value > exercicio.value.max_tries) {
+        console.log('Você excedeu o número máximo de tentativas.')
+        resortearParsons()
+      }
       document.getElementById('modal-feedback').showModal()
     }
   }
