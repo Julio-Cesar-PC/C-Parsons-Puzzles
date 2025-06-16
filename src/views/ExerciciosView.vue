@@ -258,6 +258,7 @@ onMounted(() => {
               v-if="exercicio.pythonTutor"
             >
               <iframe
+                :key="exercicio.pythonTutor"
                 :src="exercicio.pythonTutor"
                 class="w-full h-full rounded-lg"
                 title="Python Tutor"
@@ -279,6 +280,7 @@ onMounted(() => {
               v-if="exercicio.linkOneCompiler"
             >
               <iframe
+                :key="exercicio.linkOneCompiler"
                 :src="`https://onecompiler.com/embed/c/${exercicio.linkOneCompiler}?theme=dark&hideLanguageSelection=true&hideNew=true&hideNewFileOption=true`"
                 class="w-full h-full rounded-lg"
                 title="OneCompiler"
