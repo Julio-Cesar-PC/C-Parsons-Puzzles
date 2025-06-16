@@ -3,6 +3,7 @@ import { ref, onMounted } from 'vue'
 import { getExercicioAleatorio } from '../api/exercicios'
 import { postHistorico } from '@/api/usuarios'
 import { useAuth } from '@/composables/useAuth'
+import AlertaVidas from '@/components/AlertaVidas.vue'
 
 const exercicio = ref('')
 const loading = ref(true)
@@ -73,8 +74,9 @@ const enviarCodigo = () => {
       if (exercicio.value.max_tries > 0 && triesCount.value > exercicio.value.max_tries) {
         console.log('Você excedeu o número máximo de tentativas.')
         resortearParsons()
+      } else {
+        document.getElementById('modal-feedback').showModal()
       }
-      document.getElementById('modal-feedback').showModal()
     }
   }
 }
@@ -303,6 +305,11 @@ onMounted(() => {
         </form>
         <h3 class="text-lg font-bold">Feedback do Exercício</h3>
         <p class="mt-4">Verifique os erros e acertos do seu exercício.</p>
+        <AlertaVidas
+          v-if="exercicio.max_tries > 0"
+          class="mt-4"
+          :vidas="exercicio.max_tries - triesCount + 1"
+        />
         <div class="divider"></div>
         <div id="erros-modal" class="mt-4 p-4 bg-info-content rounded">console ></div>
         <p class="text-sm mt-2 text-right italic text-code">

@@ -3,7 +3,7 @@ import { GoogleLogin } from 'vue3-google-login'
 import { useAuth } from '@/composables/useAuth'
 import ProgressLevelBar from '@/components/ProgressLevelBar.vue'
 
-const { userData, auth, handleLogin, logout, connecting } = useAuth()
+const { userData, auth, handleLogin, logout, connecting, handleGetHistorico } = useAuth()
 </script>
 
 <template>
@@ -30,6 +30,9 @@ const { userData, auth, handleLogin, logout, connecting } = useAuth()
           <li>
             <RouterLink :to="{ name: 'sobre' }">Sobre</RouterLink>
           </li>
+          <!-- <li>
+            <button class="btn" @click="handleGetHistorico">Historico</button>
+          </li> -->
           <li v-if="!userData">
             <div v-if="connecting" class="loading loading-spinner loading-md"></div>
             <GoogleLogin v-else :callback="handleLogin" />
@@ -47,9 +50,9 @@ const { userData, auth, handleLogin, logout, connecting } = useAuth()
               <li>
                 <button @click="logout">Logout</button>
               </li>
-              <li v-if="userData">
+              <!-- <li v-if="userData">
                 <RouterLink :to="{ name: 'exerciciosList' }">Exercicios</RouterLink>
-              </li>
+              </li> -->
             </ul>
           </li>
         </ul>

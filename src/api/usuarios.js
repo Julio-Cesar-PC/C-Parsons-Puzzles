@@ -33,4 +33,17 @@ const postHistorico = async (payload) => {
   }
 }
 
-export { postNovoUsuario, postHistorico }
+const getHistorico = async (auth) => {
+  try {
+    const response = await api.get('/exec?actionRequest=getHistorico', {
+      params: {
+        authentication: JSON.stringify(auth)
+      },
+    })
+    return response.data
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+export { postNovoUsuario, postHistorico, getHistorico }

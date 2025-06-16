@@ -1,6 +1,6 @@
 import { ref, watchEffect } from 'vue'
 import { decodeCredential } from 'vue3-google-login'
-import { postNovoUsuario } from '../api/usuarios'
+import { postNovoUsuario, getHistorico } from '../api/usuarios'
 import router from '@/router'
 
 const userData = ref(null)
@@ -67,6 +67,19 @@ const handleNovoUsuario = async (credential) => {
   })
 }
 
+const handleGetHistorico = async () => {
+  if (auth.value) {
+    console.log('Fetching historico for user:', auth.value)
+    await getHistorico(auth.value).then((response) => {
+      if (response.status == 'success') {
+        console.log('Historico: ', response)
+      }
+    })
+  } else {
+    return []
+  }
+}
+
 const updateUserLevel = (userLevelInfo) => {
   userData.value.currentLevel = userLevelInfo.currentLevel
   userData.value.levelProgress = userLevelInfo.levelProgress
@@ -82,5 +95,6 @@ export function useAuth() {
     logout,
     updateUserLevel,
     connecting,
+    handleGetHistorico
   }
 }
