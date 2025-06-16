@@ -1,0 +1,1 @@
+import{r as n,c as r,a as s,u as l,C as o,o as i,b as u}from"./index-ETqgz1y8.js";const _={class:"flex flex-col items-center justify-center h-screen"},m={__name:"LoginView",setup(f){const a=n(null),t=e=>{if(e.credential){const c=u(e.credential);a.value=c}};return(e,c)=>(i(),r("div",_,[s(l(o),{callback:t})]))}};export{m as default};
